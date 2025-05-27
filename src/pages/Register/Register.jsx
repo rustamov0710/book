@@ -32,6 +32,7 @@ const Register = () => {
     try {
     const res = await API.post('/signup', { 
       name: values.username,
+      email: values.email,
       key: values.password,
       secret: 'MySecret1',
     });
