@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth';
 import { API } from '../../utils/config';
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const [values, setValues] = useState({
@@ -39,6 +40,7 @@ const Register = () => {
     localStorage.setItem('key', res.data.data.key);
     localStorage.setItem('secret', res.data.data.secret);
     setAuth(true);
+    toast.success('Sign Up successful!');
     navigate('/');
   } catch (err) {
     console.log(err);

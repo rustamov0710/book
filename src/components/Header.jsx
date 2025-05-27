@@ -5,6 +5,7 @@ import search from "../assets/search.svg";
 import bell from "../assets/bell.svg";
 import profile from "../assets/user-image.svg";
 import { AuthContext } from "../context/Auth";
+import { toast } from "react-toastify";
 
 const Header = ({ setSearchTitle }) => {
   const [inputValue, setInputValue] = useState("");
@@ -23,6 +24,7 @@ const Header = ({ setSearchTitle }) => {
     localStorage.removeItem("secret");
     localStorage.removeItem("auth");
     setAuth(false);
+    toast.info("Logged out successfully!");
     navigate("/signin");
   };
 
