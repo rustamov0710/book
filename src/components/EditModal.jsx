@@ -1,59 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { API } from "../utils/config";
 import { toast } from "react-toastify";
-import { Book } from "../types/type";
 
-
-
-interface EditModalProps {
-  open: boolean;
-  close: () => void;
-  book: Book;
-}
-
-
-function EditModal({ open, close, book }: EditModalProps) {
-  const [title, setTitle] = useState<string>(book.title);
-  const [cover, setCover] = useState<string>(book.cover);
-  const [pages, setPages] = useState<number>(book.pages);
-  const [publishedYear, setPublishedYear] = useState<string>(
-    book.published ? new Date(book.published).getFullYear().toString() : ""
+function EditModal({ open, close, book }) {
+  const [title, setTitle] = useState(book.title);
+  const [cover, setCover] = useState(book.cover);
+  const [pages, setPages] = useState(book.pages);
+  const [publishedYear, setPublishedYear] = useState(
+    book.published ? new Date(book.published).getFullYear() : ''
   );
-  const [isbn, setIsbn] = useState<string>(book.isbn);
-  const [status, setStatus] = useState<number>(book.status || 1);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    setTitle(book.title);
-    setCover(book.cover);
-    setPages(book.pages);
-    setPublishedYear(book.published ? new Date(book.published).getFullYear().toString() : "");
-    setIsbn(book.isbn);
-    setStatus(book.status || 1);
-  }, [book]);
+  const [isbn, setIsbn] = useState(book.isbn);
+  const [status, setStatus] = useState(book.status || 1);
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await API.patch(`/books/${book._id}`, {
-        title,
-        cover,
-        pages,
-        published: publishedYear ? new Date(publishedYear).toISOString() : null,
-        isbn,
-        status,
-      });
-      toast.success("Book updated successfully");
-      close();
-      window.location.reload(); 
-    } catch (error) {
-      toast.error("Failed to update book");
-    } finally {
-      setLoading(false);
-    }
-  };
+ const handleSubmit = async () => {
+  setLoading(true);
+  try {
+    await API.patch(`/books/${book._id}`, {
+      status,
+    });
+    toast.success("Status updated successfully");
+    close();
+    window.location.reload(); 
+  } catch (error) {
+    toast.error("Failed to update status");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div
@@ -145,7 +122,6 @@ function EditModal({ open, close, book }: EditModalProps) {
           <button
             onClick={close}
             className="border border-blue-600 text-blue-600 px-4 py-2 rounded w-full"
-            disabled={loading}
           >
             Close
           </button>

@@ -1,13 +1,5 @@
-import React from "react";
 
-interface DeleteModalProps {
-  open: boolean;
-  close: () => void;
-  bookTitle: string;
-  onDelete: () => void;
-}
-
-function DeleteModal({ open, close, bookTitle, onDelete }: DeleteModalProps) {
+function DeleteModal({ open, close, bookTitle, onDelete }) {
   if (!open) return null;
 
   return (
@@ -26,7 +18,7 @@ function DeleteModal({ open, close, bookTitle, onDelete }: DeleteModalProps) {
         >
           &times;
         </button>
-        <h2 className="text-black mb-4 text-2xl">Confirm Delete</h2>
+        <h2 className=" text-black mb-4 text-2xl">Confirm Delete</h2>
         <p className="text-black mb-6">
           Are you sure you want to delete <strong>"{bookTitle}"</strong>?
         </p>

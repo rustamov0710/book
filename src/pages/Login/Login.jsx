@@ -1,40 +1,40 @@
-import { useState, useContext, ChangeEvent, FormEvent } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth';
 import { API } from '../../utils/config';
 
-interface Values {
-  username: string;
-  password: string;
-}
+const Login = () => {  
+  const [values, setValues] = useState({
+    username: '',
+    password: '',
+  });
 
-const Login = () => {
-  const [values, setValues] = useState<Values>({ username: '', password: '' });
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValues(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.id]: e.target.value });
     setError('');
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await API.post('/signup', {
+      const res = await API.post('/signup', { 
         name: values.username,
         key: values.password,
         secret: 'MySecret1',
       });
 
-      localStorage.setItem('key', res.data.data.key);
-      localStorage.setItem('secret', res.data.data.secret);
+      console.log(res.data.data);
+       localStorage.setItem('key', res.data.data.key);
+    localStorage.setItem('secret', res.data.data.secret);
       setAuth(true);
       navigate('/');
-    } catch (err: any) {
-      console.error(err);
+    } catch (err) {
+      console.log(err);
       setError('Username or password is incorrect! Please try again.');
     }
   };

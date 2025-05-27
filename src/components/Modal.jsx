@@ -1,30 +1,24 @@
-import { useState, MouseEvent } from "react";
-import { API } from "../utils/config";
+import { useState } from "react";
+import { API } from "../utils/config"; 
 import { toast } from "react-toastify";
 
-interface ModalProps {
-  open: boolean;
-  close: () => void;
-}
-
-const Modal: React.FC<ModalProps> = ({ open, close }) => {
+function Modal({ open, close }) {
   if (!open) return null;
 
-  const [isbn, setIsbn] = useState<string>("");
+  const [isbn, setIsbn] = useState("");
 
   const handleSubmit = async () => {
+
     try {
-      await API.post("/books", { isbn });
+      await API.post("/books", { isbn: isbn });
       toast.success("Book added successfully");
       close();
-      window.location.reload();
-    } catch (err: any) {
-      console.error(err?.message || err);
+      window.location.reload(); 
+    } catch (err) {
+      console.log(err.message);
       toast.error("Failed to submit");
     }
   };
-
-  const handleModalClick = (e: MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
   return (
     <div
@@ -33,17 +27,16 @@ const Modal: React.FC<ModalProps> = ({ open, close }) => {
     >
       <div
         className="bg-white p-6 rounded-lg w-full max-w-sm relative"
-        onClick={handleModalClick}
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           className="absolute top-2 right-4 text-black text-xl"
           onClick={close}
-          aria-label="Close modal"
         >
           &times;
         </button>
         <h2 className="text-xl text-black mb-4">Create a book</h2>
-        <label htmlFor="isbn" className="text-sm text-black mb-1 block">
+        <label htmlFor="isbn" className="text-sm text-black mb-1">
           ISBN
         </label>
         <input
@@ -70,6 +63,6 @@ const Modal: React.FC<ModalProps> = ({ open, close }) => {
       </div>
     </div>
   );
-};
+}
 
 export default Modal;

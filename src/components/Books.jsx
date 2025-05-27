@@ -2,18 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import BookCard from "./BookCard";
 import Modal from "./Modal";
 import { API } from "../utils/config";
-import { Book } from "../types/type";
 
-
-
-interface Props {
-  searchTitle: string;
-}
-
-function Books({ searchTitle }: Props) {
-  const [books, setBooks] = useState<Book[]>([]);
+function Books({ searchTitle }) {
+  const [books, setBooks] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const ref = useRef<NodeJS.Timeout | null>(null);
+  const ref = useRef(null);
 
   const getBooks = async () => {
     try {
@@ -24,7 +17,7 @@ function Books({ searchTitle }: Props) {
     }
   };
 
-  const searchBooks = async (title: string) => {
+  const searchBooks = async (title) => {
     if (!title) {
       getBooks();
       return;
@@ -45,12 +38,10 @@ function Books({ searchTitle }: Props) {
       searchBooks(searchTitle.trim());
     }, 5);
 
-    return () => {
-      if (ref.current) clearTimeout(ref.current);
-    };
+    return () => clearTimeout(ref.current);
   }, [searchTitle]);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     try {
       await API.delete(`/books/${id}`);
       setBooks((prev) => prev.filter((book) => book._id !== id));

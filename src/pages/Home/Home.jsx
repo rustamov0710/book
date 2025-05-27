@@ -1,10 +1,10 @@
-import { useState, FC } from "react";
+import { useState } from "react";
 import Header from "../../components/Header";
 import Books from "../../components/Books";
 import { ToastContainer } from "react-toastify";
 
-const Home: FC = () => {
-  const [searchTitle, setSearchTitle] = useState<string>("");
+const Home = () => {
+  const [searchTitle, setSearchTitle] = useState("");
 
   return (
     <>

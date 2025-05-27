@@ -1,24 +1,15 @@
-'use client';
 import { useState } from "react";
-// @ts-ignore
-import edit from '../assets/edit.svg';
-// @ts-ignore
+import edit from "../assets/edit.svg";
 import trash from "../assets/trash.svg";
 import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
 import EditModal from "./EditModal";
-import { Book } from "../types/type";
 
-interface Props {
-  book: Book;
-  onDelete: (id: string) => void;
-}
-
-function BookCard({ book, onDelete }: Props) {
+function BookCard({ book, onDelete }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
-  const getStatusLabel = (status: number) => {
+  const getStatusLabel = (status) => {
     switch (status) {
       case 1:
         return <span className="bg-red-500 text-white px-3 py-1 rounded-[8.5px] text-sm">New</span>;
@@ -36,13 +27,6 @@ function BookCard({ book, onDelete }: Props) {
     setShowDelete(false);
   };
 
-  const publishedYear = book.published
-    ? (() => {
-        const date = new Date(book.published);
-        return isNaN(date.getTime()) ? "Invalid Date" : date.getFullYear();
-      })()
-    : "Unknown";
-
   return (
     <div className="relative group bg-white text-black rounded-xl shadow-md p-5 w-[397px] h-[214px]">
       <DeleteModal
@@ -52,10 +36,10 @@ function BookCard({ book, onDelete }: Props) {
         onDelete={handleDelete}
       />
       <EditModal
-        open={showEdit}
-        close={() => setShowEdit(false)}
-        book={book}
-      />
+  open={showEdit}
+  close={() => setShowEdit(false)}
+  book={book}
+/>
 
       <div className="absolute z-10 top-3 -right-[34px] flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <button className="w-8 h-8" onClick={() => setShowDelete(true)}>
@@ -82,7 +66,7 @@ function BookCard({ book, onDelete }: Props) {
         </Link>
       </p>
       <p className="mt-1">Pages: {book.pages}</p>
-      <p className="mt-1">Published: {publishedYear}</p>
+      <p className="mt-1">Published: {new Date(book.published).getFullYear()}</p>
       <p className="mt-1">Isbn: {book.isbn}</p>
       <p className="mt-[20px] text-sm text-gray-700">{book.author || "Unknown Author"}</p>
 

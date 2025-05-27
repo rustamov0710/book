@@ -1,32 +1,26 @@
-import { useState, useContext, ChangeEvent, FormEvent } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth';
 import { API } from '../../utils/config';
 
-interface Values {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
 const Register = () => {
-  const [values, setValues] = useState<Values>({
+  const [values, setValues] = useState({
     username: '',
-    email: '',
     password: '',
+    email: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState<string>('');
+
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { setAuth } = useContext(AuthContext);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValues(prev => ({ ...prev, [e.target.id]: e.target.value }));
+  const handleChange = (e) => {
+    setValues({ ...values, [e.target.id]: e.target.value });
     setError('');
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (values.password !== values.confirmPassword) {
@@ -35,20 +29,22 @@ const Register = () => {
     }
 
     try {
-      const res = await API.post('/signin', {
-        name: values.username,
-        key: values.password,
-        secret: 'MySecret1',
-      });
+    const res = await API.post('/signup', { 
+      name: values.username,
+      key: values.password,
+      secret: 'MySecret1',
+    });
 
-      localStorage.setItem('key', res.data.data.key);
-      localStorage.setItem('secret', res.data.data.secret);
-      setAuth(true);
-      navigate('/');
-    } catch (err: any) {
-      console.error(err);
-      setError('Username or password is incorrect! Please try again.');
-    }
+    console.log(res.data.data);
+    localStorage.setItem('key', res.data.data.key);
+    localStorage.setItem('secret', res.data.data.secret);
+    setAuth(true);
+    navigate('/');
+  } catch (err) {
+    console.log(err);
+    setError('Username or password is incorrect! Please try again.');
+  }
+
   };
 
   return (
@@ -67,18 +63,16 @@ const Register = () => {
             className="border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
             required
           />
-
           <label htmlFor="email" className="text-sm text-gray-700 mb-1">Email</label>
           <input
-            type="email"
+            type="text"
             id="email"
             placeholder="Enter your email"
-            value={values.email}
+            defaultValue={values.email}
             onChange={handleChange}
             className="border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
             required
           />
-
           <label htmlFor="password" className="text-sm text-gray-700 mb-1">Password</label>
           <input
             type="password"

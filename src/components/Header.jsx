@@ -1,23 +1,29 @@
-import { useState, ChangeEvent } from "react";
-// @ts-ignore
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
-// @ts-ignore
 import search from "../assets/search.svg";
-// @ts-ignore
 import bell from "../assets/bell.svg";
-// @ts-ignore
 import profile from "../assets/user-image.svg";
+import { AuthContext } from "../context/Auth";
 
-interface HeaderProps {
-  setSearchTitle: (title: string) => void;
-}
+const Header = ({ setSearchTitle }) => {
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
 
-const Header: React.FC<HeaderProps> = ({ setSearchTitle }) => {
-  const [inputValue, setInputValue] = useState<string>("");
+  const { setAuth } = authContext;
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setInputValue(e.target.value);
     setSearchTitle(e.target.value);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("key");
+    localStorage.removeItem("secret");
+    localStorage.removeItem("auth");
+    setAuth(false);
+    navigate("/signin");
   };
 
   return (
@@ -40,12 +46,19 @@ const Header: React.FC<HeaderProps> = ({ setSearchTitle }) => {
       </div>
 
       <div className="flex items-center space-x-4">
+        <button
+          onClick={handleLogout}
+          className="text-sm bg-red-600 hover:bg-red-500 text-white py-1.5 px-4 rounded transition"
+        >
+          Log Out
+        </button>
         <img src={bell} alt="notifications" className="w-6 h-6" />
         <img
           src={profile}
           alt="profile"
           className="w-8 h-8 rounded-full border-2 border-pink-500"
         />
+        
       </div>
     </header>
   );
