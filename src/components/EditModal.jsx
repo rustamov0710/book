@@ -3,34 +3,41 @@ import { API } from "../utils/config";
 import { toast } from "react-toastify";
 
 function EditModal({ open, close, book }) {
-  const [title, setTitle] = useState(book.title);
-  const [cover, setCover] = useState(book.cover);
-  const [pages, setPages] = useState(book.pages);
+  const [title, setTitle] = useState(book.title || "");
+  const [cover, setCover] = useState(book.cover || "");
+  const [pages, setPages] = useState(book.pages || "");
   const [publishedYear, setPublishedYear] = useState(
-    book.published ? new Date(book.published).getFullYear() : ''
+    book.published ? new Date(book.published).getFullYear() : ""
   );
-  const [isbn, setIsbn] = useState(book.isbn);
+  const [isbn, setIsbn] = useState(book.isbn || "");
   const [status, setStatus] = useState(book.status || 1);
   const [loading, setLoading] = useState(false);
 
   if (!open) return null;
 
- const handleSubmit = async () => {
-  setLoading(true);
-  try {
-    await API.patch(`/books/${book._id}`, {
-      status,
-    });
-    toast.success("Status updated successfully");
-    close();
-    window.location.reload(); 
-  } catch (error) {
-    toast.error("Failed to update status");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const updatedBook = {
+        title,
+        cover,
+        pages: Number(pages),
+        published: publishedYear ? new Date(publishedYear, 0, 1).toISOString() : null,
+        isbn,
+        status,
+      };
 
+      await API.patch(`/books/${book._id}`, updatedBook);
+      toast.success("Book updated successfully");
+      close();
+      window.location.reload();
+    } catch (error) {
+      toast.error("Failed to update book");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -44,6 +51,7 @@ function EditModal({ open, close, book }) {
         <button
           className="absolute top-2 right-4 text-black text-xl"
           onClick={close}
+          aria-label="Close modal"
         >
           &times;
         </button>
@@ -53,55 +61,63 @@ function EditModal({ open, close, book }) {
           Title
         </label>
         <input
-          type="text"
           id="title"
+          type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="text-black border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
+          className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-4"
+          placeholder="Enter book title"
         />
 
         <label htmlFor="cover" className="text-sm text-black mb-1 block">
           Cover URL
         </label>
         <input
-          type="text"
           id="cover"
+          type="text"
           value={cover}
           onChange={(e) => setCover(e.target.value)}
-          className="text-black border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
+          className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-4"
+          placeholder="Enter cover image URL"
         />
 
         <label htmlFor="pages" className="text-sm text-black mb-1 block">
           Pages
         </label>
         <input
-          type="number"
           id="pages"
+          type="number"
+          min="1"
           value={pages}
-          onChange={(e) => setPages(Number(e.target.value))}
-          className="text-black border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
+          onChange={(e) => setPages(e.target.value)}
+          className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-4"
+          placeholder="Number of pages"
         />
 
         <label htmlFor="publishedYear" className="text-sm text-black mb-1 block">
           Published Year
         </label>
         <input
-          type="text"
           id="publishedYear"
+          type="number"
+          min="1000"
+          max={new Date().getFullYear()}
           value={publishedYear}
           onChange={(e) => setPublishedYear(e.target.value)}
-          className="text-black border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
+          className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-4"
+          placeholder="Enter published year"
         />
 
         <label htmlFor="isbn" className="text-sm text-black mb-1 block">
           ISBN
         </label>
         <input
-          type="text"
           id="isbn"
+          type="text"
           value={isbn}
           onChange={(e) => setIsbn(e.target.value)}
-          className="text-black border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
+          className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-5"
+          placeholder="Enter ISBN"
         />
 
         <label htmlFor="status" className="text-sm text-black mb-1 block">
@@ -110,7 +126,7 @@ function EditModal({ open, close, book }) {
         <select
           id="status"
           value={status}
-          onChange={(e) => setStatus(parseInt(e.target.value))}
+          onChange={(e) => setStatus(parseInt(e.target.value, 10))}
           className="text-black border border-gray-300 rounded-lg py-2 px-4 w-full mb-5"
         >
           <option value={1}>🔴 New</option>
@@ -122,6 +138,7 @@ function EditModal({ open, close, book }) {
           <button
             onClick={close}
             className="border border-blue-600 text-blue-600 px-4 py-2 rounded w-full"
+            type="button"
           >
             Close
           </button>
@@ -129,6 +146,7 @@ function EditModal({ open, close, book }) {
             onClick={handleSubmit}
             disabled={loading}
             className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+            type="button"
           >
             Submit
           </button>
