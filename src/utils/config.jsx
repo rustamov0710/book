@@ -1,15 +1,9 @@
-// utils/config.jsx
 import axios from "axios";
 import CryptoJS from "crypto-js";
 
-let key = localStorage.getItem("key") || "";
-let secret = localStorage.getItem("secret") || "";
-
 export function setAuthData(userKey, userSecret) {
-  key = userKey;
-  secret = userSecret;
-  localStorage.setItem("key", key);
-  localStorage.setItem("secret", secret);
+  localStorage.setItem("key", userKey);
+  localStorage.setItem("secret", userSecret);
 }
 
 function generateSign(method, path, body, secret) {
@@ -18,7 +12,7 @@ function generateSign(method, path, body, secret) {
     bodyStr = JSON.stringify(body);
   }
   const signStr = method + path + bodyStr + secret;
-  return CryptoJS.MD5(signStr).toString();
+  return CryptoJS.MD5(signStr).toString(); 
 }
 
 export const API = axios.create({
@@ -32,6 +26,10 @@ API.interceptors.request.use((config) => {
   const method = (config.method || "get").toUpperCase();
   const url = new URL(config.url, API.defaults.baseURL);
   const path = url.pathname;
+
+  const key = localStorage.getItem("key") || "";
+  const secret = localStorage.getItem("secret") || "";
+
   const sign = generateSign(method, path, config.data, secret);
 
   config.headers["Key"] = key;

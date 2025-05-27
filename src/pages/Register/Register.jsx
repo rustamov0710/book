@@ -3,8 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/Auth';
 import { API } from '../../utils/config';
 import { toast } from 'react-toastify';
+import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [values, setValues] = useState({
     username: '',
     password: '',
@@ -77,17 +82,29 @@ const Register = () => {
             required
           />
           <label htmlFor="password" className="text-sm text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Enter your password"
-            value={values.password}
-            onChange={handleChange}
-            className="border border-gray-300 rounded-lg py-3 px-4 w-full mb-5"
-            required
-          />
+<div className="relative mb-5">
+  <input
+    type={showPassword ? "text" : "password"}
+    id="password"
+    placeholder="Enter your password"
+    value={values.password}
+    onChange={handleChange}
+    className="border border-gray-300 rounded-lg py-3 px-4 w-full pr-10"
+    required
+  />
+  <button
+    type="button"
+    onClick={() => setShowPassword((prev) => !prev)}
+    className="absolute right-3 top-4 text-gray-500 text-xl"
+  >
+    {showPassword ? <AiOutlineEyeInvisible />
+ : <AiOutlineEye />
+}
+  </button>
+</div>
 
-          <label htmlFor="confirmPassword" className="text-sm text-gray-700 mb-1">Confirm Password</label>
+
+<label htmlFor="confirmPassword" className="text-sm text-gray-700 mb-1">Confirm Password</label>
           <input
             type="password"
             id="confirmPassword"

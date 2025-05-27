@@ -6,11 +6,10 @@ import { useContext } from 'react';
 import { AuthContext } from './context/Auth';
 import Home from './pages/Home/Home';
 import { PrivateRoute } from './components/PrivateRoute';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 function App() {
   const { auth } = useContext(AuthContext);
-  
-
 
   const router = createBrowserRouter([
     {
@@ -28,6 +27,10 @@ function App() {
     {
       path: '/signup',
       element: <Register />,
+    },
+    {
+      path: '*', 
+      element: <ErrorPage />,
     },
   ]);
 
