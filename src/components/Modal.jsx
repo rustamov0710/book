@@ -15,7 +15,7 @@ function Modal({ open, close, fetchBooks }) {
       close();
       fetchBooks(); 
     } catch (err) {
-      console.log(err.message);
+      console.log(err);
       toast.error("Failed to submit");
     }
   };

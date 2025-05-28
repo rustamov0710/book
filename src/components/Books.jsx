@@ -13,7 +13,7 @@ function Books({ searchTitle }) {
       const res = await API.get("/books");
       setBooks(res.data.data);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 
@@ -27,7 +27,7 @@ function Books({ searchTitle }) {
       const res = await API.get(`/books/${title}`);
       setBooks(res.data.data);
     } catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 

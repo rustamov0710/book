@@ -33,7 +33,7 @@ function EditModal({ open, close, book, fetchBooks  }) {
       fetchBooks(); 
     } catch (error) {
       toast.error("Failed to update book");
-      console.error(error);
+      console.log(err);
     } finally {
       setLoading(false);
     }
