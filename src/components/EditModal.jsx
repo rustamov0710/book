@@ -2,7 +2,7 @@ import { useState } from "react";
 import { API } from "../utils/config";
 import { toast } from "react-toastify";
 
-function EditModal({ open, close, book }) {
+function EditModal({ open, close, book, fetchBooks  }) {
   const [title, setTitle] = useState(book.title || "");
   const [cover, setCover] = useState(book.cover || "");
   const [pages, setPages] = useState(book.pages || "");
@@ -30,7 +30,7 @@ function EditModal({ open, close, book }) {
       await API.patch(`/books/${book._id}`, updatedBook);
       toast.success("Book updated successfully");
       close();
-      window.location.reload();
+      fetchBooks(); 
     } catch (error) {
       toast.error("Failed to update book");
       console.error(error);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { API } from "../utils/config"; 
 import { toast } from "react-toastify";
 
-function Modal({ open, close }) {
+function Modal({ open, close, fetchBooks }) {
   if (!open) return null;
 
   const [isbn, setIsbn] = useState("");
@@ -13,7 +13,7 @@ function Modal({ open, close }) {
       await API.post("/books", { isbn: isbn });
       toast.success("Book added successfully");
       close();
-      window.location.reload(); 
+      fetchBooks(); 
     } catch (err) {
       console.log(err.message);
       toast.error("Failed to submit");

@@ -5,7 +5,7 @@ import DeleteModal from "./DeleteModal";
 import { Link } from "react-router-dom";
 import EditModal from "./EditModal";
 
-function BookCard({ book, onDelete }) {
+function BookCard({ book, onDelete, fetchBooks }) {
   const [showEdit, setShowEdit] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
 
@@ -39,6 +39,7 @@ function BookCard({ book, onDelete }) {
   open={showEdit}
   close={() => setShowEdit(false)}
   book={book}
+  fetchBooks={fetchBooks}
 />
 
       <div className="absolute z-10 top-3 -right-[34px] flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

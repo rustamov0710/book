@@ -24,8 +24,8 @@ const Header = ({ setSearchTitle }) => {
     localStorage.removeItem("secret");
     localStorage.removeItem("auth");
     setAuth(false);
-    toast.info("Logged out successfully!");
     navigate("/signin");
+    toast.info("Logged out successfully!");
   };
 
   return (

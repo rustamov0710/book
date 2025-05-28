@@ -76,11 +76,11 @@ function Books({ searchTitle }) {
 
       <div className="flex flex-wrap gap-[50px]">
         {books.map((book) => (
-          <BookCard key={book._id} book={book} onDelete={handleDelete} />
+          <BookCard fetchBooks={getBooks} key={book._id} book={book} onDelete={handleDelete} />
         ))}
       </div>
 
-      <Modal open={showModal} close={() => setShowModal(false)} />
+      <Modal open={showModal} close={() => setShowModal(false)} fetchBooks={getBooks} />
     </div>
   );
 }
